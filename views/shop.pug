@@ -1,0 +1,33 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{docTitle}
+        link(rel="stylesheet", href="/css/main.css")
+        link(rel="stylesheet", href="/css/product.css")
+    body 
+        header.main-header 
+            nav.main-header__nav
+                ul.main-header__item-lists
+                    li.main-header__item
+                        a.active(href='/') Shop
+                    li.main-header__item
+                        a(href='/admin/add-product') Add Product
+        
+        main
+            if prods.length > 0
+                .grid 
+                    each product in prods 
+                        .article.card.product-item 
+                            header.card__header 
+                                h1.product__title #{product.title}
+                            div.card__image
+                                img(src="https://img.freepik.com/free-psd/books-stacked-isolated-transparent-background_191095-17333.jpg?w=740&t=st=1721715197~exp=1721715797~hmac=2ae94e9286af83910fa926479a31451af9f2813126991b90e4f7a6d7f66a5a09")
+                            dv.card__content 
+                                h2.product__price $19.99
+                                p.product__description A very interesting photo
+                            .card__action 
+                                button.btn Add To Cart
+            else 
+                h1 No Data is found
