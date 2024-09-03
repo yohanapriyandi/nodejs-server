@@ -1,0 +1,20 @@
+[
+  {
+    "title": "This first book",
+    "imageUrl": "https://cdn.pixabay.com/photo/2024/05/24/19/06/bird-8785666_1280.jpg",
+    "description": "yeah this amazing products",
+    "price": "8.99"
+  },
+  {
+    "title": "This second book",
+    "imageUrl": "https://cdn.pixabay.com/photo/2022/12/31/13/11/fruits-7688632_1280.jpg",
+    "description": "This second description",
+    "price": "10.99"
+  },
+  {
+    "title": "This third book",
+    "imageUrl": "https://cdn.pixabay.com/photo/2024/07/05/08/33/koala-8874351_1280.jpg",
+    "description": "this third description",
+    "price": "40.99"
+  }
+]
