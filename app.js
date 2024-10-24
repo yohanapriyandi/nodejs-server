@@ -6,29 +6,70 @@ const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
 // const expressHbs = require('express-handlebars');
 const rootDir = require("./util/path");
+const sequelize = require("./util/db");
+const Product = require("./models/product");
+const User = require("./models/user");
+const { FORCE } = require("sequelize/lib/index-hints");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-item");
+const Order = require("./models/order");
+const OrderItem = require("./models/order-item");
 
 const app = express();
 
-// set pug template handlebars
-// app.engine('hbs',
-//             expressHbs.engine({
-//               layoutsDir:'views/layouts/',
-//               defaultLayout: 'main-layout',
-//               extname: 'hbs'
-//           })
-//         );
-// set pug template engine
 app.set("view engine", "ejs");
-//app.set('view engine', 'hbs');
-// app.set('view engine', 'pug');
+
 app.set("views", "views");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+    User.findByPk(1)
+        .then((user) => {
+            req.user = user;
+            next();
+        })
+        .catch((err) => {
+            console.log(err);           
+    });
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
 app.use(errorController.get404Page);
 
-app.listen(3000);
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+User.hasOne(Cart)
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, {through: CartItem});
+Product.belongsToMany(Cart, {through: CartItem});
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, {through: OrderItem});
+
+sequelize
+    // .sync({ force: true })
+    .sync()
+    .then((result) => {
+        return User.findByPk(1)        
+    })
+    .then((user) => { 
+        if (!user) {
+            return User.create({ name: 'Yohan', email: 'yohan@email.test' });
+        }
+        return user;
+    })
+    .then((user) => {        
+        return user.createCart();            
+    })
+    .then((cart) => {
+        // console.log(cart);
+        app.listen(3000);
+    })
+    .catch((err) => {
+        console.log(err);        
+    });
+

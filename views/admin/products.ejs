@@ -1,10 +1,10 @@
-<%- include('../partials/head.ejs') %>
+<%- include('../includes/head.ejs') %>
 
   <link rel="stylesheet" href="/css/product.css" />
 </head>
 
 <body>
-  <%- include('../partials/navigation.ejs') %>
+  <%- include('../includes/navigation.ejs') %>
 
   <main>
     <% if(prods.length > 0) { %>
@@ -21,10 +21,12 @@
                 <h2 class="product__price">$<%= product.price %></h2>
                 <p class="product__description"><%= product.description %></p>
             </div>
-            <div class="card__actions">
-                <form action="/add-to-cart" method="POST">
-                    <button class="btn">Add to Cart</button>
-                </form>
+            <div class="card__actions">                
+                    <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn">Edit</a>
+                    <form action="/admin/delete-product" method="POST">
+                      <input type="hidden" value="<%= product.id %>" name="productId">
+                      <button class="btn" type="submit">Delete</button>
+                  </form>                
             </div>
           </article>
         <% } %>
@@ -34,4 +36,4 @@
     <% } %>
 </main>
 
-<%- include('../partials/end.ejs') %>
+<%- include('../includes/end.ejs') %>

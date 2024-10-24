@@ -1,10 +1,10 @@
-<%- include('../partials/head.ejs') %>
+<%- include('../includes/head.ejs') %>
 
   <link rel="stylesheet" href="/css/product.css" />
 </head>
 
 <body>
-  <%- include('../partials/navigation.ejs') %>
+  <%- include('../includes/navigation.ejs') %>
 
   <main>
     <% if(prods.length > 0) { %>
@@ -22,9 +22,8 @@
                 <p class="product__description"><%= product.description %></p>
             </div>
             <div class="card__actions">
-                <form action="/add-to-cart" method="POST">
-                    <button class="btn">Add to Cart</button>
-                </form>
+                <a href="/products/<%= product.id %>" class="btn">Details</a>
+                <%- include('../includes/add-tocart.ejs', { product: product }) %>
             </div>
           </article>
         <% } %>
@@ -34,4 +33,4 @@
     <% } %>
 </main>
 
-<%- include('../partials/end.ejs') %>
+<%- include('../includes/end.ejs') %>
