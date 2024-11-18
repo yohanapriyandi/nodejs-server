@@ -2,22 +2,8 @@ const Product = require("../models/product");
 const Order = require("../models/order");
 const e = require("express");
 
-  exports.getIndex = (req, res, next) => {
-    Product.findAll()
-    .then(products =>{
-      res.render("shop/index", {
-        prods: products,
-        pageTitle: "My Shop",
-        path: "/products"
-      });
-    })
-    .catch(err => {
-      console.log(err)
-    }); 
-  }
-  
   exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    Product.fetchAll()
     .then(products =>{
       res.render("shop/product-lists", {
         prods: products,
@@ -33,7 +19,7 @@ const e = require("express");
 
   exports.getProduct = (req, res, next) => {
     const prodId = req.params.productId;
-    Product.findByPk(prodId)
+    Product.findById(prodId)
     .then((product) => {
       res.render("shop/product-detail", {
         product: product,
@@ -43,6 +29,20 @@ const e = require("express");
     })
     .catch(err => console.log(err));
   };
+
+  exports.getIndex = (req, res, next) => {
+    Product.fetchAll()
+    .then(products =>{
+      res.render("shop/index", {
+        prods: products,
+        pageTitle: "My Shop",
+        path: "/"
+      });
+    })
+    .catch(err => {
+      console.log(err)
+    }); 
+  }
 
   exports.getCart = (req, res, next) => {
     req.user
