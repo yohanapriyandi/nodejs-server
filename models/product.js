@@ -1,63 +1,54 @@
-const Sequelize = require('sequelize');
+const mongodb = require('mongodb');
+const getDb = require('../util/db').getDb;
 
-const sequelize = require('../util/db');
+class Product {
+    constructor(title, price, description, imageUrl) {
+        this.title = title;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
 
-const Product = sequelize.define('product', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true
-  },
-  title: {
-    type: Sequelize.STRING
-  },
-  imageUrl: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  price: {
-    type: Sequelize.DOUBLE,
-    allowNull: false
-  }
-})
+    save() {
+        const db = getDb();
+        return db
+            .collection('products')
+            .insertOne(this)
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((err) => console.log(err));
+    }
+
+    static findById(prodId) {
+        const db = getDb();
+        return db
+        .collection('products')
+        .find({ _id: new mongodb.ObjectId(prodId) })
+        .next()
+        .then((product) => {
+            console.log(product);
+            return product;
+        })
+        .catch((err) => {
+            console.log(err)
+        });
+    }
+
+    static fetchAll() {
+        const db = getDb();
+        return db
+        .collection('products')
+        .find()
+        .toArray()
+        .then((products) => {
+            console.log(products);
+            return products;
+        })
+        .catch((err) => console.log(err));
+    }
+
+    
+}
 
 module.exports = Product;
-
-
-
-
-// this oldest code for model without sequelize
-
-// const Cart = require('./cart');
-// const conn = require('../util/db');
-// module.exports = class Product {
-//   constructor(id, title, imageUrl, description, price) {
-//     this.id = id;
-//     this.title = title;
-//     this.imageUrl = imageUrl;
-//     this.description = description;
-//     this.price = price;
-//   }
-
-//   save() {
-//     return conn.execute('INSERT INTO products(title, imageUrl, description, price) VALUES (?, ?, ?, ?)', 
-//       [this.title, this.imageUrl, this.description, this.price]);  
-//   }
-
-//   static deleteById(id) {
-    
-//   }
-
-//   static fetchAll() {
-//    return conn.execute('SELECT * FROM products');
-//   }
-
-//   static findById(id) {
-//     return conn.execute('SELECT * FROM products WHERE products.id = ?', [id]);
-//   }
-// };
