@@ -1,10 +1,10 @@
 const Product = require("../models/product");
-const Order = require("../models/order");
 const e = require("express");
 
   exports.getProducts = (req, res, next) => {
-    Product.fetchAll()
+    Product.find()
     .then(products =>{
+      console.log(products);
       res.render("shop/product-lists", {
         prods: products,
         pageTitle: "All products",
@@ -31,7 +31,7 @@ const e = require("express");
   };
 
   exports.getIndex = (req, res, next) => {
-    Product.fetchAll()
+    Product.find()
     .then(products =>{
       res.render("shop/index", {
         prods: products,
