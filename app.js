@@ -1,38 +1,38 @@
-const path = require('path');
+const path = require("path");
 
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 
-const errorController = require('./controllers/error');
-const mongoConnect = require('./util/db').mongoConnect;
+const errorController = require("./controllers/error");
+const mongoConnect = require("./util/db").mongoConnect;
 
-const User = require('./models/user');
+const User = require("./models/user");
 
 const app = express();
 
-app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set("view engine", "ejs");
+app.set("views", "views");
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+const adminRoutes = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-    User.findById('67627c3af2141b94c14e6adb')
-        .then((user) => {
-            req.user = new User(user.name, user.email, user.cart, user._id);
-            next();
-        })
-        .catch((err) => console.log(err));
+  User.findById("676e227c9284d53651eb4a17")
+    .then((user) => {
+      req.user = new User(user.name, user.email, user.cart, user._id);
+      next();
+    })
+    .catch((err) => console.log(err));
 });
 
-app.use('/admin', adminRoutes);
+app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
 //app.use(errorController.get404);
 
-mongoConnect(() => {    
-    app.listen(3000);
+mongoConnect(() => {
+  app.listen(3000);
 });
